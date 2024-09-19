@@ -191,3 +191,14 @@ def spg_entropy_multistage(key, theta, reward, eta, tau, stage_length=None):
     theta = theta + eta * jax.grad(stochastic_f)(theta)
 
     return theta, eta
+
+@jax.jit
+def stochastic_npg(action_key, theta, stochastic_r, eta):
+    action = jax.random.categorical(action_key, theta)
+
+    pi = jax.nn.softmax(theta)
+    reward_hat = jax.nn.one_hot(action, len(stochastic_r)) / pi * stochastic_r
+
+    theta = theta + eta * reward_hat
+
+    return theta, eta

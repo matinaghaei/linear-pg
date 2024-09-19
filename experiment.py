@@ -21,6 +21,7 @@ from updates import (
     spg_entropy,
     spg_entropy_multistage,
     spg_multistage,
+    stochastic_npg,
 )
 from utils import save_experiment
 
@@ -203,6 +204,9 @@ def run_bandit_experiment(
 
             return algo_kwargs
 
+    elif "stochastic_npg" in algo_name:
+            gradient_update = stochastic_npg
+
     else:
         assert False, f"Unknown algorithm: {algo_name}"
 
@@ -328,7 +332,7 @@ def run_experiment(
 
             logs = []
             times = []
-            for env in tqdm.tqdm(envs, position=0, desc="envs"):
+            for i, env in enumerate(tqdm.tqdm(envs, position=0, desc="envs")):
 
                 for run_number in range(runs_per_instance):
                     theta_0 = jnp.zeros_like(env.mean_r)
@@ -340,7 +344,7 @@ def run_experiment(
                     key, exp_key = jax.random.split(key)
                     log, total_time = run_bandit_experiment(
                         env=env,
-                        run_number=run_number,
+                        run_number=run_number + runs_per_instance * i,
                         theta_0=theta_0,
                         key=exp_key,
                         time_to_log=time_to_log,
