@@ -193,8 +193,8 @@ def spg_entropy_multistage(key, theta, reward, eta, tau, stage_length=None):
     return theta, eta
 
 @jax.jit
-def stochastic_npg(action_key, theta, stochastic_r, eta):
-    action = jax.random.categorical(action_key, theta)
+def stochastic_npg(key, theta, stochastic_r, eta):
+    action = jax.random.categorical(key, theta)
 
     pi = jax.nn.softmax(theta)
     reward_hat = jax.nn.one_hot(action, len(stochastic_r)) / pi * stochastic_r
@@ -204,8 +204,8 @@ def stochastic_npg(action_key, theta, stochastic_r, eta):
     return theta, eta
 
 @jax.jit
-def exp3_ix(action_key, theta, stochastic_r, eta, gamma):
-    action = jax.random.categorical(action_key, theta)
+def exp3_ix(key, theta, stochastic_r, eta, gamma):
+    action = jax.random.categorical(key, theta)
 
     pi = jax.nn.softmax(theta)
     reward_hat = jax.nn.one_hot(action, len(stochastic_r)) / (pi + gamma) * stochastic_r
@@ -213,3 +213,31 @@ def exp3_ix(action_key, theta, stochastic_r, eta, gamma):
     theta = theta + eta * reward_hat
 
     return theta, eta
+
+@jax.jit
+def linear_pg(key, theta, r, eta, X):
+
+    @jax.grad
+    def df(theta):
+        return jax.nn.softmax(X @ theta) @ r
+
+    grad = df(theta)
+    theta = theta + eta * grad
+
+    return theta, eta
+
+@jax.jit
+def jincheng_linear_spg(
+    key, theta, stochastic_r, eta, X
+):
+    pi = jax.nn.softmax(X @ theta)
+
+    action = jax.random.categorical(key, X @ theta)
+
+    def stochastic_f(theta):
+        reward_hat = jax.nn.one_hot(action, len(stochastic_r)) / pi * stochastic_r
+        return jax.nn.softmax(X @ theta) @ reward_hat
+
+    theta = theta + eta * jax.grad(stochastic_f)(theta)
+
+    return theta, eta, action
