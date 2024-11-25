@@ -202,3 +202,14 @@ def stochastic_npg(action_key, theta, stochastic_r, eta):
     theta = theta + eta * reward_hat
 
     return theta, eta
+
+@jax.jit
+def exp3_ix(action_key, theta, stochastic_r, eta, gamma):
+    action = jax.random.categorical(action_key, theta)
+
+    pi = jax.nn.softmax(theta)
+    reward_hat = jax.nn.one_hot(action, len(stochastic_r)) / (pi + gamma) * stochastic_r
+
+    theta = theta + eta * reward_hat
+
+    return theta, eta

@@ -22,6 +22,7 @@ from updates import (
     spg_entropy_multistage,
     spg_multistage,
     stochastic_npg,
+    exp3_ix,
 )
 from utils import save_experiment
 
@@ -205,7 +206,17 @@ def run_bandit_experiment(
             return algo_kwargs
 
     elif "stochastic_npg" in algo_name:
-            gradient_update = stochastic_npg
+        gradient_update = stochastic_npg
+
+    elif "exp3_ix" in algo_name:
+        gradient_update = exp3_ix
+
+        def update_eta_and_gamma(algo_kwargs, t):
+            algo_kwargs["eta"] = jnp.sqrt(jnp.log(env.K) / (env.K * t))
+            algo_kwargs["gamma"] = algo_kwargs["eta"] / 2
+            return algo_kwargs
+        
+        algo_kwargs = update_eta_and_gamma(algo_kwargs, t=1)
 
     else:
         assert False, f"Unknown algorithm: {algo_name}"
@@ -264,24 +275,26 @@ def run_bandit_experiment(
             if t - stage_start >= algo_kwargs["stage_length"]:
                 stage_start = t
                 algo_kwargs = multistage_stage_update(algo_kwargs)
+        elif "exp3_ix" in algo_name:
+            algo_kwargs = update_eta_and_gamma(algo_kwargs, t)
 
-        if terminate_condition(theta):
-            print()
-            print(
-                f"Gradient norm is small (< 1e-8) at iteration {t}, terminating, early"
-            )
-            log.append(
-                log_data(
-                    theta,
-                    pistar,
-                    env,
-                    algo_name,
-                    optimal_action,
-                    t=t,
-                    run_number=run_number,
-                )
-            )
-            return log, total_time
+        # if terminate_condition(theta):
+        #     print()
+        #     print(
+        #         f"Gradient norm is small (< 1e-8) at iteration {t}, terminating, early"
+        #     )
+        #     log.append(
+        #         log_data(
+        #             theta,
+        #             pistar,
+        #             env,
+        #             algo_name,
+        #             optimal_action,
+        #             t=t,
+        #             run_number=run_number,
+        #         )
+        #     )
+        #     return log, total_time
 
         if t % time_to_log == 0:
             log.append(
