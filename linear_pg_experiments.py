@@ -22,6 +22,31 @@ ENV_SEED = 1337
 EXP_SEED = 1337 + 42
 
 environment_definitions = [
+    # {
+    #     "Bandit": Bandit,
+    #     "bandit_kwargs": {"d": 2},
+    #     "environment_name": "Random",
+    # },
+    # {
+    #     "Bandit": Bandit,
+    #     "bandit_kwargs": {"d": 3},
+    #     "environment_name": "Random",
+    # },
+    # {
+    #     "Bandit": Bandit,
+    #     "bandit_kwargs": {"d": 4},
+    #     "environment_name": "Random",
+    # },
+    # {
+    #     "Bandit": Bandit,
+    #     "bandit_kwargs": {"d": 5},
+    #     "environment_name": "Random",
+    # },
+    # {
+    #     "Bandit": Bandit,
+    #     "bandit_kwargs": {"d": 6},
+    #     "environment_name": "Random",
+    # },
     {
         "Bandit": FixedBandit,
         "environment_name": "Deterministic",
@@ -34,14 +59,32 @@ environment_definitions = [
     },
 ]
 
-L = 5 / 2
-
 algos = [
     {
         "algo_name": "linear_pg",
         "algo_kwargs": {},
         "theta_0": jnp.array([2., 2.])
     },
+    # {
+    #     "algo_name": "linear_pg_eta=0.01",
+    #     "algo_kwargs": {"eta": 0.01},
+    # },
+    # {
+    #     "algo_name": "linear_pg_eta=0.03",
+    #     "algo_kwargs": {"eta": 0.03},
+    # },
+    # {
+    #     "algo_name": "linear_pg_eta=0.1",
+    #     "algo_kwargs": {"eta": 0.1},
+    # },
+    # {
+    #     "algo_name": "linear_pg_eta=0.3",
+    #     "algo_kwargs": {"eta": 0.3},
+    # },
+    # {
+    #     "algo_name": "linear_pg_eta=1.0",
+    #     "algo_kwargs": {"eta": 1.0},
+    # },
 ]
 
 run_experiment(
