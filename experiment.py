@@ -23,6 +23,8 @@ from updates import (
     spg_multistage,
     stochastic_npg,
     exp3_ix,
+    linear_pg,
+    linear_spg,
 )
 from utils import save_experiment
 
@@ -217,6 +219,18 @@ def run_bandit_experiment(
             return algo_kwargs
         
         algo_kwargs = update_eta_and_gamma(algo_kwargs, t=1)
+
+    elif "linear_pg" in algo_name:
+        gradient_update = linear_pg
+        if "eta" not in algo_kwargs:
+            algo_kwargs["eta"] = 4 / (9 * max(env.mean_r) * jnp.linalg.eigh(env.features.T @ env.features)[0][-1])
+        algo_kwargs["features"] = env.features
+    
+    elif "linear_spg" in algo_name:
+        gradient_update = linear_spg
+        if "eta" not in algo_kwargs:
+            algo_kwargs["eta"] = 4 / (9 * max(env.mean_r) * jnp.linalg.eigh(env.features.T @ env.features)[0][-1])
+        algo_kwargs["features"] = env.features
 
     else:
         assert False, f"Unknown algorithm: {algo_name}"

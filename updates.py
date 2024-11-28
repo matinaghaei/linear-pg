@@ -227,7 +227,7 @@ def linear_pg(key, theta, r, eta, X):
     return theta, eta
 
 @jax.jit
-def jincheng_linear_spg(
+def linear_spg(
     key, theta, stochastic_r, eta, X
 ):
     pi = jax.nn.softmax(X @ theta)
