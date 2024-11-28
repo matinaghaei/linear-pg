@@ -230,13 +230,13 @@ def linear_pg(key, theta, r, eta, features):
 def linear_spg(
     key, theta, stochastic_r, eta, features
 ):
-    pi = jax.nn.softmax(X @ theta)
+    pi = jax.nn.softmax(features @ theta)
 
     action = jax.random.categorical(key, features @ theta)
 
     def stochastic_f(theta):
         reward_hat = jax.nn.one_hot(action, len(stochastic_r)) / pi * stochastic_r
-        return jax.nn.softmax(X @ theta) @ reward_hat
+        return jax.nn.softmax(features @ theta) @ reward_hat
 
     theta = theta + eta * jax.grad(stochastic_f)(theta)
 
