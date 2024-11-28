@@ -10,14 +10,13 @@ class Bandit:
     best_arm: int = 0
     instance_number: int = 0
     name: str = "Bandit"
+    d: int = None
     features: jnp.array = None
 
     @classmethod
     def create(cls, instance_number, name, **kwargs):
-        mean_r = kwargs["mean_r"]
-        best_arm = jnp.argmax(mean_r)
+        best_arm = jnp.argmax(kwargs["mean_r"])
         return cls(
-            mean_r=mean_r,
             instance_number=instance_number,
             best_arm=best_arm,
             name=name,
@@ -138,16 +137,16 @@ def make_bandit(
     Note: if `min_reward_gap` is not None, then we cannot guarentee that the mean reward are in the range of `[0.5 - max_reward_gap/2, 0.5 + max_reward_gap/2]`
     """
 
-    if 'Linear' in environment_name:
+    if "d" in bandit_kwargs:
 
-        d = bandit_kwargs['d']
+        d = bandit_kwargs["d"]
         K = bandit_kwargs["K"]
         X, mean_reward = generate_realizable_rewards(env_key, K, d)
 
         if not check_3_arm_det_feature_ordering(X, mean_reward):
             return None
         
-        bandit_kwargs['features'] = X
+        bandit_kwargs["features"] = X
 
     else:
         

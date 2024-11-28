@@ -215,11 +215,11 @@ def exp3_ix(key, theta, stochastic_r, eta, gamma):
     return theta, eta
 
 @jax.jit
-def linear_pg(key, theta, r, eta, X):
+def linear_pg(key, theta, r, eta, features):
 
     @jax.grad
     def df(theta):
-        return jax.nn.softmax(X @ theta) @ r
+        return jax.nn.softmax(features @ theta) @ r
 
     grad = df(theta)
     theta = theta + eta * grad
@@ -228,11 +228,11 @@ def linear_pg(key, theta, r, eta, X):
 
 @jax.jit
 def linear_spg(
-    key, theta, stochastic_r, eta, X
+    key, theta, stochastic_r, eta, features
 ):
     pi = jax.nn.softmax(X @ theta)
 
-    action = jax.random.categorical(key, X @ theta)
+    action = jax.random.categorical(key, features @ theta)
 
     def stochastic_f(theta):
         reward_hat = jax.nn.one_hot(action, len(stochastic_r)) / pi * stochastic_r

@@ -44,7 +44,10 @@ BanditData = namedtuple(
 
 
 def log_data(theta, pistar, env, algo_name, optimal_action, t, run_number):
-    pi = softmax(theta)
+    if env.features is None:
+        pi = softmax(theta)
+    else:
+        pi = softmax(env.features @ theta)
 
     sub_opt_gap = ((pistar - pi) @ env.mean_r).item()
 
@@ -65,8 +68,6 @@ def log_data(theta, pistar, env, algo_name, optimal_action, t, run_number):
 def run_bandit_experiment(
     algo_name, algo_kwargs, env, theta_0, key, T, time_to_log, run_number
 ):
-    print(f"{theta_0}")
-    print(env.mean_r)
     # map algo_name to update and specific any additional kwargs
     if "det_pg" == algo_name:
         gradient_update = det_pg
@@ -362,11 +363,17 @@ def run_experiment(
             for i, env in enumerate(tqdm.tqdm(envs, position=0, desc="envs")):
 
                 for run_number in range(runs_per_instance):
-                    theta_0 = jnp.zeros_like(env.mean_r)
 
-                    # let the worse action have a high probability of being selected
-                    if intial_policy == "bad":
-                        theta_0 = theta_0.at[0].set(12)
+                    if "d" in env_def["bandit_kwargs"]:
+                        d = env_def["bandit_kwargs"]["d"]
+                        theta_0 = jnp.zeros(d)
+                    else:
+                        theta_0 = jnp.zeros_like(env.mean_r)
+                        # let the worse action have a high probability of being selected
+                        if intial_policy == "bad":
+                            theta_0 = theta_0.at[0].set(12)
+                    if "theta_0" in algo:
+                        theta_0 = algo["theta_0"]
 
                     key, exp_key = jax.random.split(key)
                     log, total_time = run_bandit_experiment(

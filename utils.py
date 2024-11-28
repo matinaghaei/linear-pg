@@ -16,8 +16,10 @@ def save_experiment(path, experiment_name, logs, env_def, algo_name, inital_poli
 
     # make local to not modify the original
     env_def = env_def.copy()
+    env_def['bandit_kwargs'] = env_def['bandit_kwargs'].copy()
     # change the Bandit class to a string to be able to save it
     env_def['Bandit'] = env_def['Bandit'].name
-    env_def['bandit_kwargs'].pop('mean_r', None)
+    for key in env_def['bandit_kwargs'].keys():
+        env_def['bandit_kwargs'][key] = str(env_def['bandit_kwargs'][key])
     with open(f"{dir}/environment_def.json", 'w' ) as f:
         json.dump(env_def, f)
