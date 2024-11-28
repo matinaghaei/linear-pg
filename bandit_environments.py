@@ -13,10 +13,11 @@ class Bandit:
     features: jnp.array = None
 
     @classmethod
-    def create(cls, mean_reward, instance_number, name, **kwargs):
-        best_arm = jnp.argmax(mean_reward)
+    def create(cls, instance_number, name, **kwargs):
+        mean_r = kwargs["mean_r"]
+        best_arm = jnp.argmax(mean_r)
         return cls(
-            mean_r=mean_reward,
+            mean_r=mean_r,
             instance_number=instance_number,
             best_arm=best_arm,
             name=name,
@@ -160,33 +161,34 @@ def make_bandit(
         print(f"reward gap: {mean_reward[-1] - mean_reward[0]}")
     
     bandit = bandit_class.create(
-        mean_reward, instance_number, environment_name, **bandit_kwargs
+        instance_number, environment_name, **bandit_kwargs
     )
     return bandit
 
 
-def make_envs(env_def, num_runs, key):
+def make_envs(env_def, num_instances, key):
     envs = []
-    for instance_number in range(num_runs):
+    created = 0
+    while created < num_instances:
         key, env_key = jax.random.split(key)
 
         if env_def["Bandit"] is FixedBandit:
             env = env_def["Bandit"].create(
-                env_def["bandit_kwargs"]["mean_r"],
-                instance_number,
+                created,
                 env_def["environment_name"],
-                K=env_def["bandit_kwargs"]["K"],
+                **env_def["bandit_kwargs"],
             )
         else:
             env = make_bandit(
                 env_key,
-                instance_number,
+                created,
                 env_def["Bandit"],
                 env_def["bandit_kwargs"],
                 env_def["environment_name"],
                 min_reward_gap=env_def.get("min_reward_gap", None),
                 max_reward_gap=env_def.get("max_reward_gap", 0.5),
             )
-
-        envs.append(env)
+        if env is not None:
+            envs.append(env)
+            created += 1
     return envs
