@@ -12,7 +12,7 @@ from bandit_environments import Bandit, FixedBandit
 from experiment import run_experiment
 
 T = 1_000_000
-TIME_TO_LOG = T // 10
+TIME_TO_LOG = T // 100
 NUM_ARMS = 3
 LOG_DIR = f"logs"
 EXP_NAME = f"linear_pg"
@@ -24,7 +24,7 @@ EXP_SEED = 1337 + 42
 environment_definitions = [
     {
         "Bandit": FixedBandit,
-        "environment_name": "Linear Deterministic",
+        "environment_name": "Deterministic",
         "bandit_kwargs": {
             "K": NUM_ARMS,
             "d": 2, 
