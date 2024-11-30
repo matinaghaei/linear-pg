@@ -17,7 +17,7 @@ NUM_ARMS = 6
 LOG_DIR = f"logs"
 EXP_NAME = f"linear_pg"
 INTIAL_POLICY = "uniform"
-NUM_INSTANCES = 50
+NUM_INSTANCES = 1
 ENV_SEED = 1337
 EXP_SEED = 1337 + 42
 
@@ -25,27 +25,27 @@ environment_definitions = [
     # {
     #     "Bandit": Bandit,
     #     "bandit_kwargs": {"K": NUM_ARMS, "d": 2},
-    #     "environment_name": "Random",
+    #     "environment_name": "Random d=2",
     # },
     # {
     #     "Bandit": Bandit,
     #     "bandit_kwargs": {"K": NUM_ARMS, "d": 3},
-    #     "environment_name": "Random",
+    #     "environment_name": "Random d=3",
     # },
     # {
     #     "Bandit": Bandit,
     #     "bandit_kwargs": {"K": NUM_ARMS, "d": 4},
-    #     "environment_name": "Random",
+    #     "environment_name": "Random d=4",
     # },
     # {
     #     "Bandit": Bandit,
     #     "bandit_kwargs": {"K": NUM_ARMS, "d": 5},
-    #     "environment_name": "Random",
+    #     "environment_name": "Random d=5",
     # },
     {
         "Bandit": Bandit,
         "bandit_kwargs": {"K": NUM_ARMS, "d": 6},
-        "environment_name": "Random",
+        "environment_name": "Random d=6",
     },
     # {
     #     "Bandit": FixedBandit,
