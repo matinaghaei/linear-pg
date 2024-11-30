@@ -80,23 +80,6 @@ def check_reward_realizability(X, r):
     return jnp.allclose(r, proj @ r)
 
 
-def check_reward_ordering(X, r):
-    proj = X @ jnp.linalg.inv(X.T @ X) @ X.T
-    r_ = proj @ r
-    return len(jnp.unique(r_)) == len(r_) and jnp.array_equal(r.argsort(), r_.argsort())
-
-
-def check_non_domination(X):
-    matrix = X @ X.T
-    p = matrix.shape[0]
-    flag = True
-    for i in range(p):
-        for j in range(p):
-            if i != j and matrix[i, j] >= matrix[i, i]:
-                flag = False
-    return flag
-
-
 def check_3_arm_det_feature_ordering(X, r):
     order = (-r).argsort()
     return (X[order[1]] - X[order[2]]) @ (X[order[0]] - X[order[2]]) > 0
