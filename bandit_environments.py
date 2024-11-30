@@ -61,7 +61,7 @@ class FixedBandit(Bandit):
 
 
 def generate_random_features(key, K, d):
-    theta_key, features_key, reward_key = jax.random.split(key, 3)
+    features_key, reward_key = jax.random.split(key)
     X = jax.random.uniform(features_key, (K, d))
     mu = jax.random.uniform(reward_key, (K,)).sort(descending=True)
     return X, mu
@@ -102,11 +102,6 @@ def check_3_arm_det_feature_ordering(X, r):
     return (X[order[1]] - X[order[2]]) @ (X[order[0]] - X[order[2]]) > 0
 
 
-def check_3_arm_sto_feature_ordering(X, r):
-    order = (-r).argsort()
-    return (X[order[0]] - X[order[1]]) @ (X[order[1]] - X[order[2]]) > 0
-
-
 def check_multi_arm_feature_ordering(X, r):
     order = (-r).argsort()
     K = X.shape[0]
@@ -143,7 +138,7 @@ def make_bandit(
         K = bandit_kwargs["K"]
         X, mean_reward = generate_realizable_rewards(env_key, K, d)
 
-        if not check_3_arm_det_feature_ordering(X, mean_reward):
+        if not check_multi_arm_feature_ordering(X, mean_reward):
             return None
         
         bandit_kwargs["features"] = X
@@ -159,6 +154,7 @@ def make_bandit(
             mean_reward = jnp.clip(mean_reward, 0.0, 1.0)
         print(f"reward gap: {mean_reward[-1] - mean_reward[0]}")
     
+    bandit_kwargs["mean_r"] = mean_reward
     bandit = bandit_class.create(
         instance_number, environment_name, **bandit_kwargs
     )
