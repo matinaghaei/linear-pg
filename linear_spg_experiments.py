@@ -23,48 +23,48 @@ flags.DEFINE_string("initial_policy", "uniform", "Initial policy to use {uniform
 flags.DEFINE_integer("t", 1000_000, "Number of iterations")
 flags.DEFINE_string("exp_name", "linear_spg", "Experiment Name")
 flags.DEFINE_string("save_dir", "./logs/", "Log directory")
-flags.DEFINE_integer("runs_per_instance", 1, "Runs per instance")
-flags.DEFINE_integer("num_instances", 1, "Number of instance")
+flags.DEFINE_integer("runs_per_instance", 5, "Runs per instance")
+flags.DEFINE_integer("num_instances", 25, "Number of instance")
 flags.DEFINE_integer("env_seed", 1337, "Environment Seed")
 flags.DEFINE_integer("exp_seed", 100, "Experiment Seed")
 
-NUM_ARMS = 3
+NUM_ARMS = 6
 
 
 environment_definitions = [
     {
         "Bandit": BetaBandit,
-        "bandit_kwargs": {"a_plus_b": 4, "K": NUM_ARMS, "d": 2},
+        "bandit_kwargs": {"a_plus_b": 4, "K": NUM_ARMS, "d": 3},
         "max_reward_gap": 0.5,
         "environment_name": "Beta (easy)",
     },
     {
         "Bandit": BetaBandit,
-        "bandit_kwargs": {"a_plus_b": 4, "K": NUM_ARMS, "d": 2},
+        "bandit_kwargs": {"a_plus_b": 4, "K": NUM_ARMS, "d": 3},
         "max_reward_gap": 0.1,
         "environment_name": "Beta (hard)",
     },
     {
         "Bandit": GaussBandit,
-        "bandit_kwargs": {"sigma": 0.1, "K": NUM_ARMS, "d": 2},
+        "bandit_kwargs": {"sigma": 0.1, "K": NUM_ARMS, "d": 3},
         "max_reward_gap": 0.5,
         "environment_name": "Gaussian (easy)",
     },
     {
         "Bandit": GaussBandit,
-        "bandit_kwargs": {"sigma": 0.1, "K": NUM_ARMS, "d": 2},
+        "bandit_kwargs": {"sigma": 0.1, "K": NUM_ARMS, "d": 3},
         "max_reward_gap": 0.1,
         "environment_name": "Gaussian (hard)",
     },
     {
         "Bandit": BerBandit,
-        "bandit_kwargs": {"K": NUM_ARMS, "d": 2},
+        "bandit_kwargs": {"K": NUM_ARMS, "d": 3},
         "max_gap": 0.5,
         "environment_name": "Bernoulli (easy)",
     },
     {
         "Bandit": BerBandit,
-        "bandit_kwargs": {"K": NUM_ARMS, "d": 2},
+        "bandit_kwargs": {"K": NUM_ARMS, "d": 3},
         "max_gap": 0.1,
         "environment_name": "Bernoulli (hard)",
     },
@@ -80,9 +80,29 @@ def main(_):
     print(envs)
 
     ALGOS = [
+        # {
+        #     "algo_name": f"linear_spg",
+        #     "algo_kwargs": {},
+        # },
         {
-            "algo_name": f"linear_spg",
-            "algo_kwargs": {},
+            "algo_name": "linear_spg_eta=0.01",
+            "algo_kwargs": {"eta": 0.01},
+        },
+        {
+            "algo_name": "linear_spg_eta=0.03",
+            "algo_kwargs": {"eta": 0.03},
+        },
+        {
+            "algo_name": "linear_spg_eta=0.1",
+            "algo_kwargs": {"eta": 0.1},
+        },
+        {
+            "algo_name": "linear_spg_eta=0.3",
+            "algo_kwargs": {"eta": 0.3},
+        },
+        {
+            "algo_name": "linear_spg_eta=1.0",
+            "algo_kwargs": {"eta": 1.0},
         },
     ]
 
