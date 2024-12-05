@@ -240,4 +240,4 @@ def linear_spg(
 
     theta = theta + eta * jax.grad(stochastic_f)(theta)
 
-    return theta, eta, action
+    return theta, eta
