@@ -13,9 +13,9 @@ from experiment import run_experiment
 
 T = 1_000_000
 TIME_TO_LOG = T // 100
-NUM_ARMS = 3
+NUM_ARMS = 6
 LOG_DIR = f"logs"
-EXP_NAME = f"linear_pg_3_arm"
+EXP_NAME = f"linear_pg_multi_arm"
 INTIAL_POLICY = "uniform"
 NUM_INSTANCES = 50
 ENV_SEED = 1337

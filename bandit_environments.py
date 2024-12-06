@@ -121,7 +121,7 @@ def make_bandit(
         K = bandit_kwargs["K"]
         X, mean_reward = generate_realizable_rewards(env_key, K, d)
 
-        if not check_3_arm_det_feature_ordering(X, mean_reward):
+        if not check_multi_arm_feature_ordering(X, mean_reward):
             return None
         
         bandit_kwargs["features"] = X
