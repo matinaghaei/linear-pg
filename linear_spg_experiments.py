@@ -84,25 +84,37 @@ def main(_):
         #     "algo_name": f"linear_spg",
         #     "algo_kwargs": {},
         # },
-        {
-            "algo_name": "linear_spg_eta=0.01",
-            "algo_kwargs": {"eta": 0.01},
-        },
-        {
-            "algo_name": "linear_spg_eta=0.03",
-            "algo_kwargs": {"eta": 0.03},
-        },
-        {
-            "algo_name": "linear_spg_eta=0.1",
-            "algo_kwargs": {"eta": 0.1},
-        },
-        {
-            "algo_name": "linear_spg_eta=0.3",
-            "algo_kwargs": {"eta": 0.3},
-        },
+        # {
+        #     "algo_name": "linear_spg_eta=0.01",
+        #     "algo_kwargs": {"eta": 0.01},
+        # },
+        # {
+        #     "algo_name": "linear_spg_eta=0.03",
+        #     "algo_kwargs": {"eta": 0.03},
+        # },
+        # {
+        #     "algo_name": "linear_spg_eta=0.1",
+        #     "algo_kwargs": {"eta": 0.1},
+        # },
+        # {
+        #     "algo_name": "linear_spg_eta=0.3",
+        #     "algo_kwargs": {"eta": 0.3},
+        # },
         {
             "algo_name": "linear_spg_eta=1.0",
             "algo_kwargs": {"eta": 1.0},
+        },
+        {
+            "algo_name": "linear_spg_eta=10.0",
+            "algo_kwargs": {"eta": 10.0},
+        },
+        {
+            "algo_name": "linear_spg_eta=100.0",
+            "algo_kwargs": {"eta": 100.0},
+        },
+        {
+            "algo_name": "linear_spg_eta=1000.0",
+            "algo_kwargs": {"eta": 1000.0},
         },
     ]
 
