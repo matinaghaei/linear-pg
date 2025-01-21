@@ -72,6 +72,7 @@ def generate_realizable_rewards(key, K, d):
     X = jax.random.uniform(features_key, (K, d))
     theta = jax.random.uniform(theta_key, (d,))
     mu = X @ theta
+    mu = mu / mu.max()
     return X, mu
 
 
@@ -140,6 +141,7 @@ def make_bandit(
         print(f"reward gap: {mean_reward[-1] - mean_reward[0]}")
     
     bandit_kwargs["mean_r"] = mean_reward
+    print(f"mean reward: {mean_reward}")
     bandit = bandit_class.create(
         instance_number, environment_name, **bandit_kwargs
     )
