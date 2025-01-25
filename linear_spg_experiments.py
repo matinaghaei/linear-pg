@@ -35,17 +35,38 @@ environment_definitions = [
     {
         "Bandit": BetaBandit,
         "bandit_kwargs": {"a_plus_b": 4, "K": NUM_ARMS, "d": 3},
-        "environment_name": "Beta",
+        "max_reward_gap": 0.5,
+        "environment_name": "Beta (easy)",
+    },
+    {
+        "Bandit": BetaBandit,
+        "bandit_kwargs": {"a_plus_b": 4, "K": NUM_ARMS, "d": 3},
+        "max_reward_gap": 0.1,
+        "environment_name": "Beta (hard)",
     },
     {
         "Bandit": GaussBandit,
         "bandit_kwargs": {"sigma": 0.1, "K": NUM_ARMS, "d": 3},
-        "environment_name": "Gaussian",
+        "max_reward_gap": 0.5,
+        "environment_name": "Gaussian (easy)",
+    },
+    {
+        "Bandit": GaussBandit,
+        "bandit_kwargs": {"sigma": 0.1, "K": NUM_ARMS, "d": 3},
+        "max_reward_gap": 0.1,
+        "environment_name": "Gaussian (hard)",
     },
     {
         "Bandit": BerBandit,
         "bandit_kwargs": {"K": NUM_ARMS, "d": 3},
-        "environment_name": "Bernoulli",
+        "max_reward_gap": 0.5,
+        "environment_name": "Bernoulli (easy)",
+    },
+    {
+        "Bandit": BerBandit,
+        "bandit_kwargs": {"K": NUM_ARMS, "d": 3},
+        "max_reward_gap": 0.1,
+        "environment_name": "Bernoulli (hard)",
     },
 ]
 
