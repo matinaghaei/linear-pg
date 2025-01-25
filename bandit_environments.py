@@ -121,6 +121,12 @@ def make_bandit(
         d = bandit_kwargs["d"]
         K = bandit_kwargs["K"]
         X, mean_reward = generate_realizable_rewards(env_key, K, d)
+
+        mean_reward *= max_reward_gap
+        if min_reward_gap is not None:
+            sorted_mean_reward = mean_reward.sort()
+            if sorted_mean_reward[-1] - sorted_mean_reward[-2] < min_reward_gap:
+                return None
         
         if K == 3 and not check_3_arm_det_feature_ordering(X, mean_reward):
             return None
