@@ -255,11 +255,17 @@ def run_bandit_experiment(
         theta, eta = gradient_update(action_key, theta, reward, **algo_kwargs)
         return key, theta, eta
 
-    @jax.jit
-    def terminate_condition(theta):
+    if env.features is None:
         @jax.grad
         def df(theta):
             return jax.nn.softmax(theta) @ env.mean_r
+    else:
+        @jax.grad
+        def df(theta):
+            return jax.nn.softmax(env.features @ theta) @ env.mean_r
+
+    @jax.jit
+    def terminate_condition(theta):
 
         return jnp.linalg.norm(df(theta)) < 1e-8
 
@@ -293,23 +299,24 @@ def run_bandit_experiment(
         elif "exp3_ix" in algo_name:
             algo_kwargs = update_eta_and_gamma(algo_kwargs, t)
 
-        # if terminate_condition(theta):
-        #     print()
-        #     print(
-        #         f"Gradient norm is small (< 1e-8) at iteration {t}, terminating, early"
-        #     )
-        #     log.append(
-        #         log_data(
-        #             theta,
-        #             pistar,
-        #             env,
-        #             algo_name,
-        #             optimal_action,
-        #             t=t,
-        #             run_number=run_number,
-        #         )
-        #     )
-        #     return log, total_time
+        if terminate_condition(theta):
+            print()
+            print(
+                f"Gradient norm is small (< 1e-8) at iteration {t}, terminating, early"
+            )
+            log.append(
+                log_data(
+                    theta,
+                    pistar,
+                    env,
+                    algo_name,
+                    optimal_action,
+                    t=t,
+                    run_number=run_number,
+                )
+            )
+            print(f"\nFinal theta: {theta}")
+            return log, total_time
 
         if t % time_to_log == 0:
             log.append(
