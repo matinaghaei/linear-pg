@@ -299,24 +299,24 @@ def run_bandit_experiment(
         elif "exp3_ix" in algo_name:
             algo_kwargs = update_eta_and_gamma(algo_kwargs, t)
 
-        if terminate_condition(theta):
-            print()
-            print(
-                f"Gradient norm is small (< 1e-8) at iteration {t}, terminating, early"
-            )
-            log.append(
-                log_data(
-                    theta,
-                    pistar,
-                    env,
-                    algo_name,
-                    optimal_action,
-                    t=t,
-                    run_number=run_number,
-                )
-            )
-            print(f"\nFinal theta: {theta}")
-            return log, total_time
+        # if terminate_condition(theta):
+        #     print()
+        #     print(
+        #         f"Gradient norm is small (< 1e-8) at iteration {t}, terminating, early"
+        #     )
+        #     log.append(
+        #         log_data(
+        #             theta,
+        #             pistar,
+        #             env,
+        #             algo_name,
+        #             optimal_action,
+        #             t=t,
+        #             run_number=run_number,
+        #         )
+        #     )
+        #     print(f"\nFinal theta: {theta}")
+        #     return log, total_time
 
         if t % time_to_log == 0:
             log.append(
