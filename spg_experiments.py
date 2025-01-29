@@ -20,15 +20,15 @@ flags.DEFINE_integer("env_number", -1, "Environment number to run (-1 for all)")
 flags.DEFINE_integer("algo_number", -1, "Environment number to run (-1 for all)")
 flags.DEFINE_string("initial_policy", "uniform", "Initial policy to use {uniform, bad}")
 
-flags.DEFINE_integer("t", 100, "Number of iterations")
-flags.DEFINE_string("exp_name", "uni_init", "Experiment Name")
+flags.DEFINE_integer("t", 1000_000, "Number of iterations")
+flags.DEFINE_string("exp_name", "spg", "Experiment Name")
 flags.DEFINE_string("save_dir", "./logs/", "Log directory")
-flags.DEFINE_integer("runs_per_instance", 1, "Runs per instance")
-flags.DEFINE_integer("num_instances", 1, "Number of instance")
+flags.DEFINE_integer("runs_per_instance", 5, "Runs per instance")
+flags.DEFINE_integer("num_instances", 25, "Number of instance")
 flags.DEFINE_integer("env_seed", 1337, "Environment Seed")
 flags.DEFINE_integer("exp_seed", 100, "Experiment Seed")
 
-NUM_ARMS = 10
+NUM_ARMS = 6
 
 
 environment_definitions = [
@@ -59,13 +59,13 @@ environment_definitions = [
     {
         "Bandit": BerBandit,
         "bandit_kwargs": {"K": NUM_ARMS},
-        "max_gap": 0.5,
+        "max_reward_gap": 0.5,
         "environment_name": "Bernoulli (easy)",
     },
     {
         "Bandit": BerBandit,
         "bandit_kwargs": {"K": NUM_ARMS},
-        "max_gap": 0.1,
+        "max_reward_gap": 0.5,
         "environment_name": "Bernoulli (hard)",
     },
 ]
@@ -83,35 +83,51 @@ def main(_):
     print(envs)
 
     ALGOS = [
+        # {
+        #     "algo_name": "spg_ess_eta_0_1_18", # SPG-ESS
+        #     "algo_kwargs": {"alpha": (1 / FLAGS.t) ** (1 / FLAGS.t), "eta_0": 1 / 18},
+        # },
+        # {
+        #     "algo_name": "spg_multistage_ess", # SPG-ESS [D]
+        #     "algo_kwargs": {"beta": 1, "eta_0": 1 / 18, "stage_length": 5000},
+        # },
+        # {
+        #     "algo_name": "spg_gradient_step_size", # SPG-O-G
+        #     "algo_kwargs": {"eta": None},
+        # },
+        # {
+        #     "algo_name": "spg_delta_step_size", # SPG-O-D
+        #     "algo_kwargs": {
+        #         "eta": None  # step-size depends on problem dependent reward gap and is set later
+        #     },
+        # },
+        # {
+        #     "algo_name": "spg_entropy_multistage",
+        #     "algo_kwargs": {"beta": 1, "stage_length": 5000, "tau": 0.5},
+        # },
+        # {
+        #     "algo_name": f"spg_entropy_ess",
+        #     "algo_kwargs": {
+        #         "alpha": (1 / FLAGS.t) ** (1 / FLAGS.t),
+        #         "eta_0": 1 / L_ENT,
+        #         "tau": 0.1,
+        #     },
+        # },
         {
-            "algo_name": "spg_ess_eta_0_1_18", # SPG-ESS
-            "algo_kwargs": {"alpha": (1 / FLAGS.t) ** (1 / FLAGS.t), "eta_0": 1 / 18},
+            "algo_name": "spg_eta=1.0",
+            "algo_kwargs": {"eta": 1.0},
         },
         {
-            "algo_name": "spg_multistage_ess", # SPG-ESS [D]
-            "algo_kwargs": {"beta": 1, "eta_0": 1 / 18, "stage_length": 5000},
+            "algo_name": "spg_eta=10.0",
+            "algo_kwargs": {"eta": 10.0},
         },
         {
-            "algo_name": "spg_gradient_step_size", # SPG-O-G
-            "algo_kwargs": {"eta": None},
+            "algo_name": "spg_eta=100.0",
+            "algo_kwargs": {"eta": 100.0},
         },
         {
-            "algo_name": "spg_delta_step_size", # SPG-O-D
-            "algo_kwargs": {
-                "eta": None  # step-size depends on problem dependent reward gap and is set later
-            },
-        },
-        {
-            "algo_name": "spg_entropy_multistage",
-            "algo_kwargs": {"beta": 1, "stage_length": 5000, "tau": 0.5},
-        },
-        {
-            "algo_name": f"spg_entropy_ess",
-            "algo_kwargs": {
-                "alpha": (1 / FLAGS.t) ** (1 / FLAGS.t),
-                "eta_0": 1 / L_ENT,
-                "tau": 0.1,
-            },
+            "algo_name": "spg_eta=1000.0",
+            "algo_kwargs": {"eta": 1000.0},
         },
     ]
 

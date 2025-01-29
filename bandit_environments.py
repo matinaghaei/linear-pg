@@ -122,7 +122,7 @@ def make_bandit(
         K = bandit_kwargs["K"]
         X, mean_reward = generate_realizable_rewards(env_key, K, d)
 
-        mean_reward *= max_reward_gap
+        mean_reward = max_reward_gap * mean_reward + (0.5 - max_reward_gap / 2)
         if min_reward_gap is not None:
             sorted_mean_reward = mean_reward.sort()
             if sorted_mean_reward[-1] - sorted_mean_reward[-2] < min_reward_gap:

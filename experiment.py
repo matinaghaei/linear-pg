@@ -232,6 +232,9 @@ def run_bandit_experiment(
         if "eta" not in algo_kwargs:
             algo_kwargs["eta"] = 4 / (9 * max(env.mean_r) * jnp.linalg.eigh(env.features.T @ env.features)[0][-1])
         algo_kwargs["features"] = env.features
+    
+    elif "spg" in algo_name:
+        gradient_update = spg
 
     else:
         assert False, f"Unknown algorithm: {algo_name}"
