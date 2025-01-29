@@ -1,0 +1,1 @@
+{"Bandit": "Beta Bandit", "bandit_kwargs": {"a_plus_b": "4", "K": "6", "mean_r": "[0.46427037 0.46945108 0.51356756 0.5191787  0.53398688 0.54576098]"}, "max_reward_gap": 0.1, "environment_name": "Beta (hard)"}
