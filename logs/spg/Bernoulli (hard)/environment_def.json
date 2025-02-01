@@ -1,1 +1,1 @@
-{"Bandit": "Bandit", "bandit_kwargs": {"K": "6", "mean_r": "[0.32135185 0.34725542 0.56783782 0.59589349 0.6699344  0.72880489]"}, "max_reward_gap": 0.5, "environment_name": "Bernoulli (hard)"}
+{"Bandit": "Bandit", "bandit_kwargs": {"K": "6", "mean_r": "[0.46427037 0.46945108 0.51356756 0.5191787  0.53398688 0.54576098]"}, "max_reward_gap": 0.1, "environment_name": "Bernoulli (hard)"}

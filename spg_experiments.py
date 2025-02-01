@@ -11,7 +11,7 @@ jax.config.update("jax_enable_x64", True)
 jax.config.update("jax_platform_name", "cpu")
 
 import jax.numpy as jnp
-from bandit_environments import BerBandit, BetaBandit, FixedBandit, GaussBandit
+from bandit_environments import Bandit, BerBandit, BetaBandit, FixedBandit, GaussBandit
 from experiment import run_experiment
 
 FLAGS = flags.FLAGS
@@ -65,8 +65,20 @@ environment_definitions = [
     {
         "Bandit": BerBandit,
         "bandit_kwargs": {"K": NUM_ARMS},
-        "max_reward_gap": 0.5,
+        "max_reward_gap": 0.1,
         "environment_name": "Bernoulli (hard)",
+    },
+    {
+        "Bandit": Bandit,
+        "bandit_kwargs": {"K": NUM_ARMS},
+        "max_reward_gap": 0.5,
+        "environment_name": "Fixed (easy)",
+    },
+    {
+        "Bandit": Bandit,
+        "bandit_kwargs": {"K": NUM_ARMS},
+        "max_reward_gap": 0.1,
+        "environment_name": "Fixed (hard)",
     },
 ]
 
@@ -114,12 +126,24 @@ def main(_):
         #     },
         # },
         {
+            "algo_name": "spg_eta=0.3",
+            "algo_kwargs": {"eta": 0.3},
+        },
+        {
             "algo_name": "spg_eta=1.0",
             "algo_kwargs": {"eta": 1.0},
         },
         {
+            "algo_name": "spg_eta=3.0",
+            "algo_kwargs": {"eta": 3.0},
+        },
+        {
             "algo_name": "spg_eta=10.0",
             "algo_kwargs": {"eta": 10.0},
+        },
+        {
+            "algo_name": "spg_eta=30.0",
+            "algo_kwargs": {"eta": 30.0},
         },
         {
             "algo_name": "spg_eta=100.0",

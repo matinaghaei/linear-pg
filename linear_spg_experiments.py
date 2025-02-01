@@ -105,8 +105,16 @@ def main(_):
             "algo_kwargs": {"eta": 1.0},
         },
         {
+            "algo_name": "linear_spg_eta=3.0",
+            "algo_kwargs": {"eta": 3.0},
+        },
+        {
             "algo_name": "linear_spg_eta=10.0",
             "algo_kwargs": {"eta": 10.0},
+        },
+        {
+            "algo_name": "linear_spg_eta=30.0",
+            "algo_kwargs": {"eta": 30.0},
         },
         {
             "algo_name": "linear_spg_eta=100.0",
