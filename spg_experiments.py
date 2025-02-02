@@ -126,6 +126,18 @@ def main(_):
         #     },
         # },
         {
+            "algo_name": "spg_eta=0.01",
+            "algo_kwargs": {"eta": 0.01},
+        },
+        {
+            "algo_name": "spg_eta=0.03",
+            "algo_kwargs": {"eta": 0.03},
+        },
+        {
+            "algo_name": "spg_eta=0.1",
+            "algo_kwargs": {"eta": 0.1},
+        },
+        {
             "algo_name": "spg_eta=0.3",
             "algo_kwargs": {"eta": 0.3},
         },
