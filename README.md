@@ -20,4 +20,4 @@ python linear_spg_experiments.py
 ```
 
 
-For each linear bandit experiment, the corresponding plot can be generated in `linear_plot_experiments.ipynb`.
+For each linear bandit experiment, the corresponding plot can be generated in `plot_linear_experiment.ipynb`.
